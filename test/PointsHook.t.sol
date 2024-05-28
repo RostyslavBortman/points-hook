@@ -54,7 +54,7 @@ contract TestPointsHook is Test, Deployers {
             tokenCurrency, // Currency 1 = TOKEN
             hook, // Hook Contract
             3000, // Swap Fees
-            TickMath.MIN_SQRT_PRICE + 1, // Initial Sqrt(P) value = 1
+            TickMath.MIN_SQRT_PRICE, // Initial Sqrt(P) value = 1
             ZERO_BYTES // No additional `initData`
         );
     }

@@ -40,18 +40,11 @@ contract TestPointsHook is Test, Deployers {
         token.mint(address(this), 1000 ether);
         token.mint(address(1), 1000 ether);
 
-        //address hookAddress = address(uint160(Hooks.AFTER_ADD_LIQUIDITY_FLAG | Hooks.AFTER_SWAP_FLAG));
+        address hookAddress = address(uint160(Hooks.AFTER_ADD_LIQUIDITY_FLAG | Hooks.AFTER_SWAP_FLAG));
 
-        (, bytes32 salt) = HookMiner.find(
-            address(this),
-            uint160(Hooks.AFTER_ADD_LIQUIDITY_FLAG | Hooks.AFTER_SWAP_FLAG),
-            0,
-            type(PointsHook).creationCode,
-            abi.encode(manager, "Points Token", "TEST_POINTS")
-        );
-        hook = new PointsHook{salt: salt}(manager, "Points Token", "TEST_POINTS");
+        deployCodeTo("PointsHook.sol", abi.encode(manager, "Points Token", "TEST_POINTS"), hookAddress);
+        hook = PointsHook(hookAddress);
 
-        //deployCodeTo("PointsHook.sol", abi.encode(manager, "Points Token", "TEST_POINTS"), hookAddress);
         token.approve(address(swapRouter), type(uint256).max);
         token.approve(address(modifyLiquidityRouter), type(uint256).max);
 
@@ -61,7 +54,7 @@ contract TestPointsHook is Test, Deployers {
             tokenCurrency, // Currency 1 = TOKEN
             hook, // Hook Contract
             3000, // Swap Fees
-            TickMath.MIN_SQRT_PRICE, // Initial Sqrt(P) value = 1
+            TickMath.MIN_SQRT_PRICE + 1, // Initial Sqrt(P) value = 1
             ZERO_BYTES // No additional `initData`
         );
     }

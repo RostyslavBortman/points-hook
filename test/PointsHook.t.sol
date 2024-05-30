@@ -18,8 +18,6 @@ import {TickMath} from "v4-core/libraries/TickMath.sol";
 import {PointsHook} from "../src/PointsHook.sol";
 import {HookMiner} from "./utils/HookMiner.sol";
 
-import "forge-std/console.sol";
-
 contract TestPointsHook is Test, Deployers {
     using CurrencyLibrary for Currency;
 
@@ -54,7 +52,7 @@ contract TestPointsHook is Test, Deployers {
             tokenCurrency, // Currency 1 = TOKEN
             hook, // Hook Contract
             3000, // Swap Fees
-            TickMath.MIN_SQRT_PRICE, // Initial Sqrt(P) value = 1
+            SQRT_PRICE_1_1, // Initial Sqrt(P) value = 1
             ZERO_BYTES // No additional `initData`
         );
     }
@@ -98,7 +96,7 @@ contract TestPointsHook is Test, Deployers {
                 amountSpecified: -0.001 ether, // Exact input for output swap
                 sqrtPriceLimitX96: TickMath.MIN_SQRT_PRICE + 1
             }),
-            PoolSwapTest.TestSettings({takeClaims: true, settleUsingBurn: true}),
+            PoolSwapTest.TestSettings({takeClaims: true, settleUsingBurn: false}),
             hookData
         );
         uint256 pointsBalanceAfterSwap = hook.balanceOf(address(this));
@@ -139,7 +137,7 @@ contract TestPointsHook is Test, Deployers {
                 amountSpecified: -0.001 ether,
                 sqrtPriceLimitX96: TickMath.MIN_SQRT_PRICE + 1
             }),
-            PoolSwapTest.TestSettings({takeClaims: true, settleUsingBurn: true}),
+            PoolSwapTest.TestSettings({takeClaims: true, settleUsingBurn: false}),
             hookData
         );
         uint256 pointsBalanceAfterSwap = hook.balanceOf(address(this));
